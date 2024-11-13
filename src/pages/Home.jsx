@@ -24,7 +24,7 @@ import {
     {
       name: 'Calendar Integration',
       description:
-        'Seamlessly integrate with your existing calendar.',
+        'Calendar to summarise your job.',
       icon: CalendarIcon,
     },
     {
