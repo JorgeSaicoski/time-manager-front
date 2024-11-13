@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Button styles */
+  .btn-primary {
+    @apply bg-btn-primary-bg text-btn-primary-text hover:bg-btn-hover-bg transition-colors duration-300;
+  }
+
+  .btn-accent {
+    @apply bg-btn-accent-bg text-btn-accent-text hover:bg-btn-hover-bg hover:text-btn-primary-text transition-colors duration-300;
+  }
+
+  .btn-error {
+    @apply bg-btn-error-bg text-btn-error-text hover:brightness-110 transition-colors duration-300;
+  }
+
+  /* Text styles */
+  .text-primary {
+    @apply text-text-primary;
+  }
+
+  .text-secondary {
+    @apply text-text-secondary;
+  }
+
+  .text-accent {
+    @apply text-text-accent;
+  }
+
+  /* Background styles */
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-secondary;
+  }
+
+  /* Card styles */
+  .card-primary {
+    @apply bg-secondary border border-secondary-accent rounded-lg shadow-lg;
+  }
+}
