@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { LoginPage } from './pages/auth/Login';
 import { RegisterPage } from './pages/auth/Register';
+import { ProtectedLoginRoute } from './pages/protectRoutes/ProtectedLoginRoute';
+import Dashboard from './pages/user/Dashboard';
 
 function App() {
   return (
@@ -13,6 +15,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedLoginRoute>
+                <Dashboard/>
+              </ProtectedLoginRoute>
+            }
+          />
         </Routes>
       </Router>
     </Provider>

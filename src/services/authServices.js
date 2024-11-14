@@ -1,4 +1,4 @@
-const API_URL = '/api/auth';
+const API_URL = 'http://localhost:8080/auth';
 
 export const authService = {
   async login(email, password) {
@@ -17,6 +17,8 @@ export const authService = {
   },
 
   async register(email, password, name) {
+    console.log(`${API_URL}/register`)
+    console.log(JSON.stringify({ email, password, name }),)
     const response = await fetch(`${API_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
