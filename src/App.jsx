@@ -5,7 +5,6 @@ import { store } from './store';
 import { LoginPage } from './pages/auth/Login';
 import { RegisterPage } from './pages/auth/Register';
 import { ProtectedLoginRoute } from './pages/protectRoutes/ProtectedLoginRoute';
-import Dashboard from './pages/user/Dashboard';
 import UserRouter from './pages/user/UserRouter';
 
 function App() {

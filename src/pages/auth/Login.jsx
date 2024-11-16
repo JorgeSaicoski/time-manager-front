@@ -88,7 +88,7 @@ export const LoginPage = () => {
                             <div className="text-center">
                                 <button
                                     type="button"
-                                    onClick={() => navigate('/register')}
+                                    onClick={() => navigate('/user/register')}
                                     className="btn btn-link"
                                 >
                                     Need an account? Register
