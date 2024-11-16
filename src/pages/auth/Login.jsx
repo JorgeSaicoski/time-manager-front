@@ -21,7 +21,7 @@ export const LoginPage = () => {
         try {
             const data = await authService.login(email, password);
             dispatch(setCredentials(data));
-            navigate('/dashboard');
+            navigate('/user/dashboard');
         } catch (err) {
             dispatch(setError(err.message));
         } finally {
@@ -88,7 +88,7 @@ export const LoginPage = () => {
                             <div className="text-center">
                                 <button
                                     type="button"
-                                    onClick={() => navigate('/user/register')}
+                                    onClick={() => navigate('/register')}
                                     className="btn btn-link"
                                 >
                                     Need an account? Register

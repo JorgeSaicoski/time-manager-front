@@ -4,7 +4,7 @@ import Dashboard from "./Dashboard"
 function UserRouter() {
   return (
     <Routes>
-            <Route path="Dashboard" element={<Dashboard/>}/>
+            <Route path="dashboard" element={<Dashboard/>}/>
     </Routes>
   )
 }
