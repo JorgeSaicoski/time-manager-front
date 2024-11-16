@@ -32,12 +32,12 @@ export const RegisterPage = () => {
     };
 
     return (
-        <div className="min-h-screen hero bg-base-200">
+        <div className="min-h-screen hero bg-primary text-text-secondary">
             <div className="hero-content flex-col w-full max-w-md">
-                <div className="card w-full bg-base-100 shadow-xl">
+                <div className="card w-full bg-secondary shadow-xl">
                     <div className="card-body">
                         <h1 className="card-title text-3xl font-bold text-center justify-center">Create Account</h1>
-                        <p className="text-center text-base-content/60">Sign up for a new account</p>
+                        <p className="text-center text-text-primary">Sign up for a new account</p>
 
                         <form onSubmit={handleSubmit} className="form-control gap-4">
                             {error && (
@@ -49,7 +49,7 @@ export const RegisterPage = () => {
 
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Name</span>
+                                    <span className="label-text-secondary">Name</span>
                                 </label>
                                 <input
                                     type="text"
@@ -63,7 +63,7 @@ export const RegisterPage = () => {
 
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Email</span>
+                                    <span className="label-text-secondary">Email</span>
                                 </label>
                                 <input
                                     type="email"
@@ -77,7 +77,7 @@ export const RegisterPage = () => {
 
                             <div className="form-control">
                                 <label className="label">
-                                    <span className="label-text">Password</span>
+                                    <span className="label-text-secondary">Password</span>
                                 </label>
                                 <input
                                     type="password"
@@ -89,7 +89,7 @@ export const RegisterPage = () => {
                                     minLength={8}
                                 />
                                 <label className="label">
-                                    <span className="label-text-alt">Must be at least 8 characters</span>
+                                    <span className="label-text-accent">Must be at least 8 characters</span>
                                 </label>
                             </div>
 

@@ -30,7 +30,7 @@ export const LoginPage = () => {
     };
 
     return (
-        <div className="min-h-screen hero bg-base-200">
+        <div className="min-h-screen hero bg-secondary">
             <div className="hero-content flex-col w-full max-w-md">
                 <div className="card w-full bg-base-100 shadow-xl">
                     <div className="card-body">
