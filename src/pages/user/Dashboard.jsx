@@ -1,9 +1,24 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { UserCircleIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { toltalTimeService } from '../../services/totalTimeService';
 
 const Dashboard = () => {
   const { user } = useSelector(state => state.auth);
+
+  const healthCheck = async (e) => {
+    e.preventDefault()
+    try {
+        console.log("Attempting health check...")
+        const data = await toltalTimeService.getHealth()
+        console.log("Health check response:", data)
+    } catch (err) {
+        console.error("Health check error:", {
+            message: err.message,
+            status: err.status,
+            fullError: err
+        })
+    }
+}
   
   return (
     <div className="space-y-6">
@@ -16,7 +31,7 @@ const Dashboard = () => {
             </div>
             <div>
               <h1 className="text-2xl font-bold">Welcome, {user?.name}!</h1>
-              <p className="text-base-content/60">Here's your time management overview</p>
+              <p className="text-base-content/60">Here your time management overview</p>
             </div>
           </div>
         </div>
@@ -31,7 +46,7 @@ const Dashboard = () => {
                 <ClockIcon className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h2 className="card-title">Today's Hours</h2>
+                <h2 className="card-title">Today Hours</h2>
                 <p className="text-3xl font-bold">0h</p>
               </div>
             </div>
@@ -83,7 +98,7 @@ const Dashboard = () => {
         <div className="card-body">
           <h2 className="card-title mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-4">
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={healthCheck}>
               Start Timer
             </button>
             <button className="btn btn-secondary">
