@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:8080/totaltime';
 
 const getAuthToken = () => {
-    console.log(localStorage.getItem('token'))
+    console.log(localStorage.getItem('token'));
     return localStorage.getItem('token');
 };
 
@@ -10,11 +10,11 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-export const toltalTimeService = {
+export const totalTimeService = {
     async getHealth(userID) {
-        const response = await fetch(`${API_URL}/health`, {
+        const response = await fetch(`${API_URL}/health/${userID}`, {
+            method: 'GET',
             headers,
-            user_id: userID  
         });
         
         if (!response.ok) {

@@ -23,7 +23,7 @@ export const RegisterPage = () => {
         try {
             const data = await authService.register(email, password, name);
             dispatch(setCredentials(data));
-            navigate('/dashboard');
+            navigate('/user/dashboard');
         } catch (err) {
             dispatch(setError(err.message));
         } finally {

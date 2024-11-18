@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { UserCircleIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
-import { toltalTimeService } from '../../services/totalTimeService';
+import { totalTimeService } from '../../services/totalTimeService';
 
 const Dashboard = () => {
   const { user } = useSelector(state => state.auth);
@@ -10,7 +10,7 @@ const Dashboard = () => {
     e.preventDefault()
     try {
         console.log("Attempting health check...")
-        const data = await toltalTimeService.getHealth(user.id)
+        const data = await totalTimeService.getHealth(user.id)
         console.log(data)
     } catch (err) {
         console.error("Health check error:", {
