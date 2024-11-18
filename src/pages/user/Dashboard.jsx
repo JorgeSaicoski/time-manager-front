@@ -6,11 +6,12 @@ const Dashboard = () => {
   const { user } = useSelector(state => state.auth);
 
   const healthCheck = async (e) => {
+    console.log(user)
     e.preventDefault()
     try {
         console.log("Attempting health check...")
-        const data = await toltalTimeService.getHealth()
-        console.log("Health check response:", data)
+        const data = await toltalTimeService.getHealth(user.id)
+        console.log(data)
     } catch (err) {
         console.error("Health check error:", {
             message: err.message,

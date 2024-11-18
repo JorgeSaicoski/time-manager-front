@@ -11,9 +11,10 @@ const headers = {
 };
 
 export const toltalTimeService = {
-    async getHealth() {
+    async getHealth(userID) {
         const response = await fetch(`${API_URL}/health`, {
-            headers  
+            headers,
+            user_id: userID  
         });
         
         if (!response.ok) {
