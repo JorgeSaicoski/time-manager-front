@@ -35,7 +35,7 @@ const totalTimeSlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
     },
-    resetTotalTime: (state) => {
+    resetTotalTime: () => {
       return initialState;
     },
     addWorkTime: (state, { payload }) => {
