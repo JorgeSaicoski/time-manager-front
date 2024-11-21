@@ -11,8 +11,8 @@ const headers = {
 };
 
 export const totalTimeService = {
-    async getHealth(userID) {
-        const response = await fetch(`${API_URL}/health/${userID}`, {
+    async getTotalTime(userID) {
+        const response = await fetch(`${API_URL}/user/${userID}`, {
             method: 'GET',
             headers,
         });
@@ -21,6 +21,7 @@ export const totalTimeService = {
             const error = await response.json();
             throw new Error(error.error);
         }
+        console.log(response)
         return response.json();
     }
 };

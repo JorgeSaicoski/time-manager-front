@@ -1,26 +1,37 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserCircleIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { totalTimeService } from '../../services/totalTimeService';
+import { useEffect, useState } from 'react';
+import { setTotalTime, setLoading, setError } from '../../store/slices/totalTimeSlice';
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
+  const totalTime = useSelector(state => state.totalTime);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const healthCheck = async (e) => {
-    console.log(user)
-    e.preventDefault()
-    try {
-        console.log("Attempting health check...")
-        const data = await totalTimeService.getHealth(user.id)
-        console.log(data)
-    } catch (err) {
-        console.error("Health check error:", {
-            message: err.message,
-            status: err.status,
-            fullError: err
-        })
+
+  useEffect(() => {
+    if (user?.id) {
+      const getTotalTime = async () => {
+        try {
+          setIsLoading(true);
+          dispatch(setLoading(true));
+          const response = await totalTimeService.getTotalTime(user?.id);
+          dispatch(setTotalTime(response));
+        } catch (error) {
+          console.error('Error fetching total time:', error);
+          dispatch(setError(error.message));
+        } finally {
+          setIsLoading(false);
+          dispatch(setLoading(false));
+        }
+      };
+      getTotalTime()
     }
-}
-  
+  }, [user?.id, dispatch]); 
+
+
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -31,8 +42,8 @@ const Dashboard = () => {
               <UserCircleIcon className="w-10 h-10 text-primary" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Welcome, {user?.name}!</h1>
-              <p className="text-base-content/60">Here your time management overview</p>
+              <h1 className="text-2xl font-bold">Welcome, {user?.name || 'User'}!</h1>
+              <p className="text-base-content/60">Heres your time management overview</p>
             </div>
           </div>
         </div>
@@ -47,8 +58,10 @@ const Dashboard = () => {
                 <ClockIcon className="w-6 h-6 text-accent" />
               </div>
               <div>
-                <h2 className="card-title">Today Hours</h2>
-                <p className="text-3xl font-bold">0h</p>
+                <h2 className="card-title">Todays Hours</h2>
+                <p className="text-3xl font-bold">
+                  {isLoading ? 'Loading...' : 0}
+                </p>
               </div>
             </div>
           </div>
@@ -62,7 +75,9 @@ const Dashboard = () => {
               </div>
               <div>
                 <h2 className="card-title">This Week</h2>
-                <p className="text-3xl font-bold">0h</p>
+                <p className="text-3xl font-bold">
+                  {isLoading ? 'Loading...' : 0}
+                </p>
               </div>
             </div>
           </div>
@@ -83,11 +98,25 @@ const Dashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td colSpan="3" className="text-center text-base-content/60">
-                    No recent activity
-                  </td>
-                </tr>
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="3" className="text-center">Loading...</td>
+                  </tr>
+                ) : totalTime?.recentActivity?.length ? (
+                  totalTime.recentActivity.map((activity, index) => (
+                    <tr key={index}>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>0</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="text-center text-base-content/60">
+                      No recent activity
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -99,13 +128,25 @@ const Dashboard = () => {
         <div className="card-body">
           <h2 className="card-title mb-4">Quick Actions</h2>
           <div className="flex flex-wrap gap-4">
-            <button className="btn btn-primary" onClick={healthCheck}>
+            <button 
+              className="btn btn-primary"
+              disabled={isLoading}
+              onClick={() => {/* Add start timer logic */}}
+            >
               Start Timer
             </button>
-            <button className="btn btn-secondary">
+            <button 
+              className="btn btn-secondary"
+              disabled={isLoading}
+              onClick={() => {/* Add project logic */}}
+            >
               Add Project
             </button>
-            <button className="btn btn-accent">
+            <button 
+              className="btn btn-accent"
+              disabled={isLoading}
+              onClick={() => {/* Add reports logic */}}
+            >
               View Reports
             </button>
           </div>
