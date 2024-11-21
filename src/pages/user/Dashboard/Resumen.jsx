@@ -1,6 +1,13 @@
-import { UserCircleIcon, ClockIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon, CalendarIcon } from '@heroicons/react/24/outline';
+import { useNavigate } from 'react-router-dom';
 
 const Resumen = ({ user }) => {
+    const navigate = useNavigate();
+
+    const goToHelper = () => {
+        console.log("go")
+        navigate('/user/helper')
+    }
 
 
     return (
@@ -85,7 +92,7 @@ const Resumen = ({ user }) => {
                         <div className="flex flex-wrap gap-4">
                             <button
                                 className="btn btn-primary"
-                                onClick={() => {/* Add start timer logic */ }}
+                                onClick={goToHelper}
                             >
                                 Help
                             </button>

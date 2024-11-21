@@ -12,7 +12,7 @@ export default {
           // Base colors
           primary: '#008B8B',     
           secondary: '#1F2E40',
-          'secondary-accent': '#354F6F', // Note: in CSS we use kebab-case
+          'secondary-accent': '#354F6F', 
           accent: '#FFC107',     
           hover: '#20B2AA',  
           error: '#C0392B',   
