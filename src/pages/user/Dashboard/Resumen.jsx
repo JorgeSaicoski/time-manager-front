@@ -1,11 +1,24 @@
 import { UserCircleIcon, CalendarIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
+import { totalTimeService } from '@services/totalTimeService';
+import { useDispatch } from 'react-redux';
+import { setTotalTime } from '@store/slices/totalTimeSlice';
 
 const Resumen = ({ user }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const goToHelper = () => {
         navigate('/user/helper')
+    }
+
+    const initTotalTime = async () => {
+        try {
+            const response = await totalTimeService.createTotalTime(user?.id, null)
+            dispatch(setTotalTime(response))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -34,13 +47,13 @@ const Resumen = ({ user }) => {
                                 <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center">
                                     <CalendarIcon className="w-6 h-6 text-text-primary" />
                                 </div>
-                                <div>
+                                <button onClick={initTotalTime}>
 
                                     <h2 className="card-title">Star new total time</h2>
                                     <p className="font-bold text-sm">
                                         Track your total work hours, including project time, breaks, and brief interruptions, all in one comprehensive view.
                                     </p>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -106,6 +119,12 @@ const Resumen = ({ user }) => {
                                 onClick={() => {/* Add reports logic */ }}
                             >
                                 View Reports
+                            </button>
+                            <button
+                                className="btn btn-accent"
+                                onClick={initTotalTime}
+                            >
+                                Init a Total Time
                             </button>
                         </div>
                     </div>
