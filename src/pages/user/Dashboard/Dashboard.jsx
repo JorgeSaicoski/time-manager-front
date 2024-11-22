@@ -3,6 +3,7 @@ import { totalTimeService } from '@services/totalTimeService';
 import { useEffect, useState } from 'react';
 import { setTotalTime, setLoading, setError } from '@store/slices/totalTimeSlice';
 import Resumen from './Resumen';
+import CurrentTotalTime from './CurrentTotalTime';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -35,17 +36,13 @@ const Dashboard = () => {
     }
   }, [user?.id, dispatch, totalTime?.id]);
   
-  const display = () =>{
-    console.log(totalTime)
-    console.log(totalTimeRun)
-    console.log(isLoading)
-  }
+
 
 
   return (
     <>
       {totalTimeRun ? (
-        <div>totaltime <button onClick={display}>click</button></div>
+        <CurrentTotalTime></CurrentTotalTime>
         
       ) : isLoading ? (
         <div>Loading...</div>
