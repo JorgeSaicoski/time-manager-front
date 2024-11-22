@@ -1,32 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  data: null,
+  user: null,
+  token: localStorage.getItem('token'),
+  refreshToken: localStorage.getItem('refresh_token'),
   loading: false,
-  error: null
+  error: null,
 };
 
-const totalTimeSlice = createSlice({
-  name: 'totalTime',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
-    setTotalTime: (state, action) => {
-      state.data = action.payload;
-      state.error = null;
+    setCredentials: (state, { payload }) => {
+      state.user = payload.user;
+      state.token = payload.tokens.access_token;
+      state.refreshToken = payload.tokens.refresh_token;
+      localStorage.setItem('token', payload.tokens.access_token);
+      localStorage.setItem('refresh_token', payload.tokens.refresh_token);
     },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
+    logout: (state) => {
+      state.user = null;
+      state.token = null;
+      state.refreshToken = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('refresh_token');
     },
-    setError: (state, action) => {
-      state.error = action.payload;
-      state.data = null;
+    setLoading: (state, { payload }) => {
+      state.loading = payload;
     },
-    clearTotalTime: (state) => {
-      state.data = null;
-      state.error = null;
-    }
-  }
+    setError: (state, { payload }) => {
+      state.error = payload;
+    },
+  },
 });
 
-export const { setTotalTime, setLoading, setError, clearTotalTime } = totalTimeSlice.actions;
-export default totalTimeSlice.reducer;
+export const { setCredentials, logout, setLoading, setError } = authSlice.actions;
+
+export default authSlice.reducer;

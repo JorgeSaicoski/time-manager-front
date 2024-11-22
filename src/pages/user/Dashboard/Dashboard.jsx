@@ -1,14 +1,25 @@
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { totalTimeService } from '@services/totalTimeService';
-import { useEffect } from 'react';
 import { setTotalTime, setLoading, setError } from '@store/slices/totalTimeSlice';
-import Resumen from './Resumen';
+import { totalTimeService } from '@services/totalTimeService';
 import CurrentTotalTime from './CurrentTotalTime';
+import Resumen from './Resumen'
+
+
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth);
-  const { data: totalTime, loading, error } = useSelector(state => state.totalTime);
+  
+  const user = useSelector(state => state.auth.user);
+  const totalTime = useSelector(state => ({
+    id: state.totalTime.id,
+    userId: state.totalTime.userId,
+    companyId: state.totalTime.companyId,
+    startTime: state.totalTime.startTime,
+    closed: state.totalTime.closed
+  }));
+  const loading = useSelector(state => state.totalTime.loading);
+  const error = useSelector(state => state.totalTime.error);
 
   useEffect(() => {
     let mounted = true;
@@ -23,10 +34,10 @@ const Dashboard = () => {
         if (mounted) {
           dispatch(setTotalTime(response));
         }
-      } catch (error) {
-        console.error('Error fetching total time:', error);
+      } catch (err) {
+        console.error('Error fetching total time:', err);
         if (mounted) {
-          dispatch(setError(error.message));
+          dispatch(setError(err.message || 'Failed to fetch total time'));
         }
       } finally {
         if (mounted) {
@@ -42,11 +53,28 @@ const Dashboard = () => {
     };
   }, [user?.id, dispatch]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div className="p-4 text-red-600 bg-red-50 rounded">
+        Error: {error}
+      </div>
+    );
   }
 
-  return totalTime?.id ? <CurrentTotalTime /> : <Resumen user={user} />;
+  if (loading) {
+    return (
+      <div className="p-4 text-gray-600">
+        Loading...
+      </div>
+    );
+  }
+
+  return totalTime.id ? (
+    
+    <CurrentTotalTime />
+  ) : (
+    <Resumen user={user} />
+  );
 };
 
 export default Dashboard;
