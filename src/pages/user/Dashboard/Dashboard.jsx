@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { totalTimeService } from '@services/totalTimeService';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { setTotalTime, setLoading, setError } from '@store/slices/totalTimeSlice';
 import Resumen from './Resumen';
 import CurrentTotalTime from './CurrentTotalTime';
@@ -8,49 +8,45 @@ import CurrentTotalTime from './CurrentTotalTime';
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector(state => state.auth);
-  const totalTime = useSelector(state => state.totalTime);
-  const [isLoading, setIsLoading] = useState(false);
-  const [totalTimeRun, setTotalTimeRun] = useState(false)
-
+  const { data: totalTime, loading, error } = useSelector(state => state.totalTime);
 
   useEffect(() => {
-    if (user?.id) {
-      const getTotalTime = async () => {
-        try {
-          setIsLoading(true);
-          dispatch(setLoading(true));
-          const response = await totalTimeService.getTotalTime(user?.id);
+    let mounted = true;
+
+    const getTotalTime = async () => {
+      if (!user?.id) return;
+
+      try {
+        dispatch(setLoading(true));
+        const response = await totalTimeService.getTotalTime(user.id);
+
+        if (mounted) {
           dispatch(setTotalTime(response));
-        } catch (error) {
-          console.error('Error fetching total time:', error);
+        }
+      } catch (error) {
+        console.error('Error fetching total time:', error);
+        if (mounted) {
           dispatch(setError(error.message));
-        } finally {
-          setIsLoading(false);
+        }
+      } finally {
+        if (mounted) {
           dispatch(setLoading(false));
         }
-        if (totalTime?.id) {
-          setTotalTimeRun(true)
-        }
-      };
-      getTotalTime()
-    }
-  }, [user?.id, dispatch, totalTime?.id]);
-  
+      }
+    };
 
+    getTotalTime();
 
+    return () => {
+      mounted = false;
+    };
+  }, [user?.id, dispatch]);
 
-  return (
-    <>
-      {totalTimeRun ? (
-        <CurrentTotalTime></CurrentTotalTime>
-        
-      ) : isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <Resumen user={user} />
-      )}
-    </>
-  );
-}
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return totalTime?.id ? <CurrentTotalTime /> : <Resumen user={user} />;
+};
 
 export default Dashboard;
