@@ -12,7 +12,7 @@ const headers = {
 
 export const totalTimeService = {
     async getTotalTime(userID) {
-        const response = await fetch(`${API_URL}/user/${userID}`, {
+        const response = await fetch(`${API_URL}/current/user/${userID}`, {
             method: 'GET',
             headers,
         });

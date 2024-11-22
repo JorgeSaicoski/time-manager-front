@@ -5,7 +5,6 @@ const Resumen = ({ user }) => {
     const navigate = useNavigate();
 
     const goToHelper = () => {
-        console.log("go")
         navigate('/user/helper')
     }
 

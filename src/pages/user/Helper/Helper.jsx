@@ -45,7 +45,7 @@ const Helper = () => {
     ];
 
     return (
-      <div className="card bg-primary shadow-xl min-h-screen">
+      <div className="bg-primary shadow-xl min-h-screen">
           <div className="card-body">
               <h2 className="card-title text-2xl text-text-primary mb-4">Time Management Guide</h2>
               <div className="grid gap-4">
