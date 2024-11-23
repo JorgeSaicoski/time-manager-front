@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 const initialState = {
   id: null,
@@ -19,15 +19,11 @@ const totalTimeSlice = createSlice({
   initialState,
   reducers: {
     setTotalTime: (state, { payload }) => {
-      state.id = payload?.id;
-      state.userId = payload?.user?.id;
-      state.companyId = payload?.company?.id;
-      state.startTime = payload?.startTime;
-      state.closed = payload?.closed;
+      Object.assign(state, payload);
     },
     closeTotalTime: (state) => {
       state.closed = true;
-      state.finishTime = new Date().toISOString(); 
+      state.finishTime = new Date().toISOString();
     },
     setLoading: (state, { payload }) => {
       state.loading = payload;
@@ -35,9 +31,7 @@ const totalTimeSlice = createSlice({
     setError: (state, { payload }) => {
       state.error = payload;
     },
-    resetTotalTime: () => {
-      return initialState;
-    },
+    resetTotalTime: () => initialState,
     addWorkTime: (state, { payload }) => {
       state.workTimes.push(payload);
     },
@@ -49,6 +43,31 @@ const totalTimeSlice = createSlice({
     }
   }
 });
+
+export const selectTotalTime = (state) => state.totalTime;
+export const selectClosed = (state) => state.totalTime.closed;
+export const selectWorkTimes = (state) => state.totalTime.workTimes;
+export const selectLoading = (state) => state.totalTime.loading;
+export const selectError = (state) => state.totalTime.error;
+export const selectBreakTime = (state) => state.totalTime.breakTime;
+export const selectBrb = (state) => state.totalTime.brb;
+export const selectUserId = (state) => state.totalTime.userId;
+export const selectStartTime = (state) => state.totalTime.startTime;
+export const selectFinishTime = (state) => state.totalTime.finishTime;
+
+export const selectTotalWorkTime = createSelector(
+  [selectWorkTimes],
+  (workTimes) => workTimes.reduce((total, time) => total + time, 0)
+);
+
+export const selectSessionStatus = createSelector(
+  [selectClosed, selectBrb],
+  (closed, brb) => {
+    if (closed) return 'CLOSED';
+    if (brb) return 'AWAY';
+    return 'ACTIVE';
+  }
+);
 
 export const {
   setTotalTime,

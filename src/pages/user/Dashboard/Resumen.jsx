@@ -14,10 +14,15 @@ const Resumen = ({ user }) => {
 
     const initTotalTime = async () => {
         try {
-            const response = await totalTimeService.createTotalTime(user?.id, null)
-            dispatch(setTotalTime(response))
+            const response = await totalTimeService.createTotalTime(user?.id, null);
+            dispatch(setTotalTime({
+                ...response,
+                closed: false,
+                workTimes: [],
+                breakTime: null
+            }));
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 

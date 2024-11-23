@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { totalTimeService } from '@services/totalTimeService';
 import {
   ClockIcon,
   PlayIcon,
   StopIcon,
   PauseIcon,
   ArrowPathIcon,
-  BeakerIcon
+  StopCircleIcon,
+  ArrowRightStartOnRectangleIcon
 } from '@heroicons/react/24/outline';
+import { closeTotalTime } from '../../../store/slices/totalTimeSlice';
+
+const selectTotalTime = state => ({
+  id: state.totalTime.id,
+  userId: state.totalTime.userId,
+  companyId: state.totalTime.companyId,
+  startTime: state.totalTime.startTime,
+  closed: state.totalTime.closed
+});
+const selectUser = state => state.auth.user;
 
 const CurrentTotalTime = () => {
+  const dispatch = useDispatch();
+  const totalTime = useSelector(selectTotalTime);
+  const user = useSelector(selectUser)
   const [currentState, setCurrentState] = useState('idle'); 
   const [totalTimeStarted, setTotalTimeStarted] = useState(new Date().toISOString());
   const [currentActivity, setCurrentActivity] = useState(null);
@@ -54,7 +70,14 @@ const CurrentTotalTime = () => {
     setSelectedProject(null);
   };
 
-  const finishTotalTime = () => {
+  const finishTotalTime = async () => {
+    try {
+      const response = await totalTimeService.closeTotalTime(user.id)
+      dispatch(closeTotalTime())
+    } catch (error) {
+      console.log(error)
+      
+    }
     stopCurrentActivity();
     setTotalTimeStarted(null);
   };
@@ -73,7 +96,7 @@ const CurrentTotalTime = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-4">
-      <div className="card bg-base-100 shadow-xl">
+      <div className="card bg-secondary text-text-primary shadow-xl">
         <div className="card-body">
           <div className="flex justify-between items-center">
             <h2 className="card-title">Current Total Time</h2>
@@ -81,7 +104,7 @@ const CurrentTotalTime = () => {
               className="btn btn-error btn-sm gap-2"
               onClick={finishTotalTime}
             >
-              <StopIcon className="w-4 h-4" />
+              <StopCircleIcon className="w-6 h-6" />
               Finish Total Time
             </button>
           </div>
@@ -146,14 +169,14 @@ const CurrentTotalTime = () => {
                   className="btn btn-secondary gap-2"
                   onClick={startBreak}
                 >
-                  <PauseIcon className="w-4 h-4" />
+                  <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
                   Take Break
                 </button>
                 <button 
                   className="btn btn-secondary gap-2"
                   onClick={startBrb}
                 >
-                  <BeakerIcon className="w-4 h-4" />
+                  <PauseIcon className="w-4 h-4" />
                   BRB
                 </button>
               </div>

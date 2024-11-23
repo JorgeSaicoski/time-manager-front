@@ -43,7 +43,7 @@ export default {
           "secondary": '#1F2E40',
           "accent": '#FFC107',
           "neutral": '#354F6F',
-          "base-100": '#FFFFFF',
+          "base-100": '#008B8B',
           "info": '#20B2AA',
           "success": '#007A74',
           "warning": '#FFC93C',

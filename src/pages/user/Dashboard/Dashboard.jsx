@@ -1,22 +1,14 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTotalTime, setLoading, setError } from '@store/slices/totalTimeSlice';
 import { totalTimeService } from '@services/totalTimeService';
 import CurrentTotalTime from './CurrentTotalTime';
 import Resumen from './Resumen';
 
-// Memoized selectors
 const selectUser = state => state.auth.user;
-const selectTotalTimeState = state => state.totalTime;
-const selectTotalTime = state => ({
-  id: state.totalTime.id,
-  userId: state.totalTime.userId,
-  companyId: state.totalTime.companyId,
-  startTime: state.totalTime.startTime,
-  closed: state.totalTime.closed
-});
 const selectLoading = state => state.totalTime.loading;
 const selectError = state => state.totalTime.error;
+const selectTotalTime = state => state.totalTime;
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -25,7 +17,7 @@ const Dashboard = () => {
   const totalTime = useSelector(selectTotalTime);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-
+  
   const getTotalTime = useCallback(async () => {
     if (!user?.id) return;
 
@@ -33,8 +25,15 @@ const Dashboard = () => {
       dispatch(setLoading(true));
       const response = await totalTimeService.getTotalTime(user.id);
       
-
-      dispatch(setTotalTime(response));
+      const isClosed = response.FinishTime && response.FinishTime !== "0001-01-01T00:00:00Z";
+      
+      dispatch(setTotalTime({
+        ...response,
+        closed: isClosed,
+        workTimes: response.WorkTimes || [],
+        breakTime: response.BreakTime || null,
+      }));
+      
     } catch (err) {
       console.error('Error fetching total time:', err);
       dispatch(setError(err.message || 'Failed to fetch total time'));
@@ -44,20 +43,12 @@ const Dashboard = () => {
   }, [user?.id, dispatch]);
 
   useEffect(() => {
-    let mounted = true;
+    getTotalTime();
+  }, [getTotalTime]); 
 
-    const fetchData = async () => {
-      if (mounted) {
-        await getTotalTime();
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      mounted = false;
-    };
-  }, [getTotalTime]);
+  if (loading) {
+    return <div className="p-4 text-gray-600">Loading...</div>;
+  }
 
   if (error) {
     return (
@@ -67,15 +58,7 @@ const Dashboard = () => {
     );
   }
 
-  if (loading) {
-    return (
-      <div className="p-4 text-gray-600">
-        Loading...
-      </div>
-    );
-  }
-
-  return totalTime.id !== null ? <CurrentTotalTime /> : <Resumen user={user} />;
+  return totalTime.closed ? <Resumen user={user} /> : <CurrentTotalTime />;
 };
 
 export default Dashboard;
